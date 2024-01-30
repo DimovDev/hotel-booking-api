@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->integer('number')->unique();
+            $table->string('type')->unique();
+            $table->double('price_per_night');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
