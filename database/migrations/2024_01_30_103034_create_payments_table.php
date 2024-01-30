@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('booking_id')->constrained('bookings');
+            $table->double('amount');
+            $table->dateTime('payment_date')->default('current_timestamp');
             $table->timestamps();
         });
     }
