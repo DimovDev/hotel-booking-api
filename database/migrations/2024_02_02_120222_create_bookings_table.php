@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('room_id')->constrained('rooms');
             $table->foreignId('customer_id')->constrained('customers');
-            $table->dateTime('check_in_date')->default('current_timestamp');
-            $table->dateTime('check_out_date')->default('current_timestamp');
-            $table->double('total_price');
+            $table->dateTime('check_in_date');
+            $table->dateTime('check_out_date');
+            $table->decimal('total_price');
             $table->timestamps();
         });
     }

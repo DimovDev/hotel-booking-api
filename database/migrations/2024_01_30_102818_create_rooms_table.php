@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('number')->unique();
             $table->string('type')->unique();
-            $table->double('price_per_night');
-            $table->boolean('status')->default(true);
+            $table->decimal('price_per_night');
+            $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();
         });
     }
