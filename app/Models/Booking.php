@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
@@ -33,5 +33,21 @@ class Booking extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    /**
+     * Calculate the booking price based on the provided attributes.
+     *
+     * @param array $attributes The attributes for the booking including room_id, check_in_date, and check_out_date
+     * @return array The newly created booking object
+     */
+    public static function calculateBookingPrice(array $attributes):array
+    {
+        $room = Room::findOrFail($attributes['room_id']);
+        $pricePerNight =  $room->price_per_night;
+        $checkInDate = Carbon::parse($attributes['check_in_date']);
+        $checkOutDate = Carbon::parse($attributes['check_out_date']);
 
+        $attributes['total_price'] = $pricePerNight * $checkInDate->diffInDays($checkOutDate);
+
+        return $attributes;
+    }
 }

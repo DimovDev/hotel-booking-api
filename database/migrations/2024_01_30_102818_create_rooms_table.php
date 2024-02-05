@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->integer('number')->unique();
-            $table->string('type')->unique();
+            $table->string('number')->unique();
+            $table->string('type');
             $table->decimal('price_per_night');
             $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();

@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreCustomerRequest extends FormRequest
 {
@@ -17,14 +20,14 @@ class StoreCustomerRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'name' => 'required|string|min:3|max:255',
             'email' => 'required|email|max:255|unique:customers,email',
-            'phoneNumber' => 'required|numeric',
+            'phone_number' => 'required|numeric',
         ];
     }
 
@@ -39,8 +42,18 @@ class StoreCustomerRequest extends FormRequest
             'email.email' => 'The email must be a valid email address.',
             'email.max' => 'The email may not be greater than 255 characters.',
             'email.unique' => 'The email has already been taken.',
-            'phoneNumber.required' => 'The phone number field is required.',
-            'phoneNumber.numeric' => 'The phone number must be a number.',
+            'phone_number.required' => 'The phone number field is required.',
+            'phone_number.numeric' => 'The phone number must be a number.',
         ];
+    }
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param Validator $validator
+     * @throws HttpResponseException description of exception
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }
