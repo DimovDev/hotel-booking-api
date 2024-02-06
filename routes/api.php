@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\RoomController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-Route::group(['namespace' => '\App\Http\Controllers\Api' ], function () {
+Route::group(['namespace' => '\App\Http\Controllers\Api', 'middleware' => 'auth:sanctum'], function () {
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('rooms', RoomController::class);
     Route::apiResource('bookings', BookingController::class);
     Route::apiResource('payments', PaymentController::class);
 });
+Route::post('login', [AuthController::class, 'login'])->name('login');
