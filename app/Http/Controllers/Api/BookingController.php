@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\BookingProcessedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Resources\BookingResource;
@@ -30,6 +31,9 @@ class BookingController extends Controller
     {
         $attributes = Booking::calculateBookingPrice($request->all());
         $booking = Booking::create($attributes);
+
+        event(new BookingProcessedEvent($booking));
+
         return new BookingResource($booking);
     }
 
